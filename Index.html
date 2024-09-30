@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta e Controle de Figurinhas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <h1>Consulta de Figurinha</h1>
+    <label for="numerosConsulta">Insira os números das figurinhas (separados por vírgula):</label>
+    <input type="text" id="numerosConsulta" required>
+    <button onclick="consultarSequencia()">Consultar</button>
+
+    <div class="resultado" id="resultado"></div>
+
+    <script>
+        let bancoDados = JSON.parse(localStorage.getItem('bancoDados')) || [
+            { numero: 88, quantidade: 1, comQuem: "MKT CS" },
+            { numero: 90, quantidade: 3, comQuem: "MKT CS" },
+            // ... (restante dos dados)
+            { numero: 65, quantidade: 1, comQuem: "MKT CS" },
+        ];
+
+        const historicoRetiradas = [];
+
+        function consultarSequencia() {
+            const numeros = document.getElementById('numerosConsulta').value.split(',').map(num => parseInt(num.trim()));
+            const resultadoDiv = document.getElementById('resultado');
+            resultadoDiv.innerHTML = '<h3>Resultados da Consulta:</h3>';
+
+            numeros.forEach(numero => {
+                const figurinha = bancoDados.find(f => f.numero === numero);
+                if (figurinha) {
+                    if (figurinha.quantidade > 0) {
+                        resultadoDiv.innerHTML += `<p>Figurinha ${figurinha.numero} - Quantidade: ${figurinha.quantidade} - Com quem está: ${figurinha.comQuem}</p>`;
+                    } else {
+                        resultadoDiv.innerHTML += `<p>Figurinha ${figurinha.numero} - Não tem disponível.</p>`;
+                    }
+                } else {
+                    resultadoDiv.innerHTML += `<p>Figurinha ${numero} não encontrada.</p>`;
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
+
